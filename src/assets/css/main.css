@@ -1,0 +1,21 @@
+html {
+    font-size: 62.5%;
+}
+body {
+    font-family: "GilroyRegular", sans-serif;
+    font-size: 1.2rem;
+}
+
+main {
+    width: 70%;
+    margin: 0 auto;
+}
+
+section {
+    width: 100%;
+}
+
+.slider, .breadcrumb {
+    width: 90%;
+    margin: 0 auto;
+}

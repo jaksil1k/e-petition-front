@@ -1,0 +1,28 @@
+.profile__section {
+    border-bottom: 1px solid #006EFF;
+    width: 90%;
+    justify-content: center;
+    margin: 1rem 10rem;
+}
+
+.profile__nav {
+    display: flex;
+    justify-content: space-between;
+
+    width: 20%;
+    padding: 1rem 0;
+    margin-left: 4rem;
+
+    color: #555555;
+    font-weight: 500;
+    font-size: 1.6rem;
+
+    font-family: "GilroySemiBold", sans-serif;
+}
+
+
+.profile__link {
+    position: relative;
+    padding: 0 1rem;
+    margin-right: 1rem;
+}

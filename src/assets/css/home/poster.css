@@ -1,0 +1,32 @@
+.poster {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    height: 40vh;
+}
+
+.poster__title {
+    font-size: 4rem;
+    font-family: "GilroySemiBold", sans-serif;
+}
+
+.poster__text {
+    font-size: 1.6rem;
+}
+
+.poster__button {
+    padding: 1rem 2rem;
+
+    border: none;
+    border-radius: 16px;
+
+    background: linear-gradient(127deg, #40B8EC 3.2%, rgba(0, 66, 114, 0.75) 94.99%);
+    box-shadow: 0 5px 14.2px 0 rgba(0, 0, 0, 0.25);
+
+    color: white;
+    font-size: 1.6rem;
+    font-family: "GilroySemiBold", sans-serif;
+}

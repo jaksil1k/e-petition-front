@@ -1,0 +1,55 @@
+.slider {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+
+    padding: 2rem;
+
+    border: 1px solid #006EFF;
+    border-radius: 1rem;
+}
+
+.slider__image {
+    width: 100%;
+}
+
+.slider__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.slider__title {
+    font-size: 2rem;
+    font-family: "GilroySemiBold", sans-serif;
+}
+
+.slider__description {
+    font-size: 1.8rem;
+}
+
+.slider__text {
+    font-size: 1.4rem;
+}
+
+.slider__buttons-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.slider__button {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    padding: 0.4rem 3rem;
+
+    background: none;
+
+    border: 1px solid #006EFF;
+    border-radius: 5px;
+}
+
+.slider__icon {
+    width: 2rem;
+}

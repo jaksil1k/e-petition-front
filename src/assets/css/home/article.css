@@ -1,0 +1,29 @@
+.article {
+    display: flex;
+    gap: 4rem;
+
+    padding: 2rem;
+    justify-content: space-between;
+
+    border: 1px solid #006EFF;
+    border-radius: 1.6rem;
+}
+
+.article__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.article__title {
+    font-size: 1.8rem;
+    font-family: "GilroySemiBold", sans-serif;
+}
+
+.article__description {
+    font-size: 1.6rem;
+}
+
+.article__image {
+    width: 50%;
+}
