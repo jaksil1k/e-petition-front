@@ -10,18 +10,18 @@
 
     <section class="profile__section">
       <nav class="profile__nav">
-        <a class="profile__link" @click="showCreated">Created</a>
-        <a class="profile__link" @click="showSigned">Signed</a>
+        <a class="profile__link" :style="createdListActive" @click="showCreated">Created</a>
+        <a class="profile__link" :style="signedListActive" @click="showSigned">Signed</a>
       </nav>
     </section>
-    <section class="created-petitions" v-for="item in createdList" :key="item.id">
+    <section class="created-petitions" v-for="item in list" :key="item.id">
       <div class="petition">
-          <div class="petition__item">
-            <p class="petition__p">{{item.title}}</p>
-          </div>
+        <div class="petition__item">
+          <p class="petition__p">{{item.title}}</p>
+        </div>
         <div>
           <button @click="showPetition(item.id)">
-              Show Petition
+            Show Petition
           </button>
         </div>
       </div>
@@ -30,33 +30,52 @@
 </template>
 
 <script>
+import { API } from "@/http-common";
 import axios from "axios";
 
 export default {
   name: 'ProfileView',
   data() {
     return {
-      createdList: [],
-      signedList: [],
+      list: [],
+      isCreatedListActive: true,
     }
   },
   methods: {
     showPetition(id) {
       this.$router.push({name: 'petition_view', params: {id: id}})
+    },
+    async showCreated() {
+      let response = await axios.get("http://localhost:8081/api/petition/my",
+          {headers: {"Content-Type": "application/json",
+              Authorization: localStorage.getItem('SavedToken')}});
+      console.log(response.data);
+      this.list = response.data.petitions;
+      this.isCreatedListActive = true;
+    },
+    async showSigned() {
+      let response = await axios.get("http://localhost:8081/api/petition/signed",
+          {headers: {"Content-Type": "application/json",
+              Authorization: localStorage.getItem('SavedToken')}});
+      console.log(response.data);
+      this.list = response.data.petitions;
+      this.isCreatedListActive = false;
+    },
+  },
+  computed: {
+    createdListActive() {
+      return {
+        '--underlined': this.isCreatedListActive ? "#006EFF" : "transparent",
+      }
+    },
+    signedListActive() {
+      return {
+        '--underlined': !this.isCreatedListActive ? "#006EFF" : "transparent",
+      }
     }
   },
-  async mounted() {
-    let result1 = await axios.get("http://localhost:8081/api/petition/my",
-        {headers: {"Content-Type": "application/json",
-        Authorization: localStorage.getItem('SavedToken')}});
-    console.log(result1.data);
-    this.createdList = result1.data.petitions;
-
-    let result2 = await axios.get("http://localhost:8081/api/petition/my",
-        {headers: {"Content-Type": "application/json",
-            Authorization: localStorage.getItem('SavedToken')}});
-    console.log(result2.data);
-   this.signedList = result2.data.petitions;
+  mounted() {
+    this.showCreated();
   }
 }
 </script>
@@ -85,7 +104,7 @@ export default {
 }
 
 
-.profile__link:nth-child(1)::after {
+.profile__link::after {
   content: "";
 
   position: absolute;
@@ -95,6 +114,6 @@ export default {
   width: 120%;
   height: 5px;
 
-  background-color: #006EFF;
+  background-color: var(--underlined);
 }
 </style>
