@@ -82,7 +82,6 @@ export default {
 
 <style scoped>
 @import '../assets/css/profile/style.css';
-@import '../assets/css/profile/petitions.css';
 @import '../assets/css/profile/nav.css';
 
 .created-petitions {

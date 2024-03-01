@@ -1,0 +1,14 @@
+.poster {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 30vh;
+
+}
+
+.poster__title {
+    font-size: 4rem;
+    font-family: "GilroySemiBold", sans-serif;
+    width: 55%;
+}
+

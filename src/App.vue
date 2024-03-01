@@ -6,9 +6,9 @@
   <header class="header">
     <nav class="header__nav">
       <router-link class="header__link" to="/">Main</router-link>
+      <router-link class="header__link" to="/petitions">View Petitions</router-link>
       <router-link class="header__link" to="/create-petition">Create Petitions</router-link>
       <router-link class="header__link" @click="viewProfile" to="#">My Petitions</router-link>
-<!--        <router-link class="header__link" to="#">View Petitions</router-link>-->
     </nav>
   </header>
 

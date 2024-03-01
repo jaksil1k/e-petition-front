@@ -5,6 +5,7 @@ import ProfileView from "@/views/ProfileView";
 import RegisterView from "@/views/RegisterView";
 import LoginView from "@/views/LoginView";
 import PetitionView from "@/views/PetitionView";
+import PetitionsView from "@/views/PetitionsView";
 
 
 const routes = [
@@ -42,10 +43,14 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/petition/:id',
+    path: '/petitions/:id',
     name: 'petition_view',
     component: PetitionView,
-
+  },
+  {
+    path: '/petitions',
+    name: 'petitions',
+    component: PetitionsView
   }
 ]
 

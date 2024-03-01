@@ -32,62 +32,6 @@
       </h3>
 
       <ul class="breadcrumb__list">
-<!--        <li class="breadcrumb__item">-->
-<!--          <article class="article">-->
-<!--            <div class="article__info">-->
-<!--              <div class="article__title">-->
-<!--                A petition about domestic violence has been signed by over 233 222 people-->
-<!--              </div>-->
-<!--              <div class="article__description">-->
-<!--                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacus lorem, placerat vitae-->
-<!--                ornare id,-->
-<!--                interdum eu quam. Donec cursus ac lacus quis vulputate. Phasellus pulvinar convallis nunc at-->
-<!--                efficitur.-->
-<!--                Proin vehicula turpis in mauris posuere aliquam. Nam elementum est sem, sed porttitor mi-->
-<!--                consectetur et.-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <img class="article__image" src="@/assets/images/article-image.png" alt=""/>-->
-<!--          </article>-->
-<!--        </li>-->
-<!--        <li class="breadcrumb__item">-->
-<!--          <article class="article">-->
-<!--            <div class="article__info">-->
-<!--              <div class="article__title">-->
-<!--                A petition about domestic violence has been signed by over 233 222 people-->
-<!--              </div>-->
-<!--              <div class="article__description">-->
-<!--                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacus lorem, placerat vitae-->
-<!--                ornare id,-->
-<!--                interdum eu quam. Donec cursus ac lacus quis vulputate. Phasellus pulvinar convallis nunc at-->
-<!--                efficitur.-->
-<!--                Proin vehicula turpis in mauris posuere aliquam. Nam elementum est sem, sed porttitor mi-->
-<!--                consectetur et.-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <img class="article__image" src="@/assets/images/article-image.png" alt=""/>-->
-<!--          </article>-->
-<!--        </li>-->
-<!--        <li class="breadcrumb__item">-->
-<!--          <article class="article">-->
-<!--            <div class="article__info">-->
-<!--              <div class="article__title">-->
-<!--                A petition about domestic violence has been signed by over 233 222 people-->
-<!--              </div>-->
-<!--              <div class="article__description">-->
-<!--                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacus lorem, placerat vitae-->
-<!--                ornare id,-->
-<!--                interdum eu quam. Donec cursus ac lacus quis vulputate. Phasellus pulvinar convallis nunc at-->
-<!--                efficitur.-->
-<!--                Proin vehicula turpis in mauris posuere aliquam. Nam elementum est sem, sed porttitor mi-->
-<!--                consectetur et.-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <img class="article__image" src="@/assets/images/article-image.png" alt=""/>-->
-<!--          </article>-->
-<!--        </li>-->
-
-
         <li class="breadcrumb__item" v-for="item in list" :key="item.id">
           <article class="article" @click="showPetition(item.id)">
             <div class="article__info">
@@ -98,15 +42,12 @@
                 {{item.body}}
               </div>
             </div>
-            <img class="article__image" src="@/assets/images/article-image.png">
+            <img class="article__image" src="@/assets/images/article-image.png" alt="petition image">
           </article>
-
-
         </li>
       </ul>
     </section>
   </main>
-<!--  <img id="ItemPreview" src="">-->
 
 </template>
 

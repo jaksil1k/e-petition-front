@@ -1,0 +1,39 @@
+.petitions__section {
+    border-bottom: 1px solid #006EFF;
+}
+
+.petitions__nav {
+    display: flex;
+    justify-content: space-between;
+
+    width: 70%;
+    padding: 2rem 0;
+    margin-left: 2rem;
+
+    color: #555555;
+    font-weight: 500;
+    font-size: 1.6rem;
+
+    font-family: "GilroySemiBold", sans-serif;
+}
+
+a.active {
+    border-bottom: 5px solid #006EFF;
+}
+
+.petitions__link {
+    position: relative;
+}
+
+.petitions__link:nth-child(1)::after {
+    content: "";
+
+    position: absolute;
+    top: 4rem;
+    left: -1rem;
+
+    width: 120%;
+    height: 5px;
+
+    background-color: #006EFF;
+}

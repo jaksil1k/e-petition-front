@@ -1,0 +1,17 @@
+.breadcrumb {
+    padding: 3rem 0 5rem;
+}
+
+.breadcrumb__title {
+    padding-bottom: 3rem;
+
+    font-size: 3rem;
+    font-family: "GilroySemiBold", sans-serif;
+}
+
+.breadcrumb__list {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
