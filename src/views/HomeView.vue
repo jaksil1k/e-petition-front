@@ -34,15 +34,17 @@
       <ul class="breadcrumb__list">
         <li class="breadcrumb__item" v-for="item in list" :key="item.id">
           <article class="article" @click="showPetition(item.id)">
-            <div class="article__info">
-              <div class="article__title">
-                {{item.title}}
+            <div class="article__content">
+              <div class="article__info">
+                <div class="article__title">
+                  {{item.title}}
+                </div>
+                <div class="article__description">
+                  {{item.body}}
+                </div>
               </div>
-              <div class="article__description">
-                {{item.body}}
-              </div>
+              <img class="article__image" src="@/assets/images/article-image.png" alt="petition image">
             </div>
-            <img class="article__image" src="@/assets/images/article-image.png" alt="petition image">
           </article>
         </li>
       </ul>

@@ -1,9 +1,9 @@
 .article {
     display: flex;
     gap: 4rem;
-
+    flex-direction: column;
     padding: 2rem;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 
     border: 1px solid #006EFF;
     border-radius: 1.6rem;

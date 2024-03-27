@@ -10,24 +10,24 @@
       <label class="create-petition__text" for="title">Заголовок петиции</label>
       <input v-model="title" class="create-petition__input-text" type="text" id="title" required>
 
-<!--      <div-->
-<!--        class="dropzone"-->
-<!--        @dragover.prevent-->
-<!--        @dragenter.prevent-->
-<!--        @dragstart.prevent-->
-<!--        @drop.prevent="handleFileChange($event.dataTransfer)"-->
-<!--    >-->
-<!--      <input-->
-<!--          id="file-input"-->
-<!--          type="file"-->
-<!--          accept="image/png, image/jpeg"-->
-<!--          @change="handleFileChange($event.target)"-->
-<!--          required-->
-<!--      />-->
-<!--      <h2 for="file-input">Click or Drag N Drop Image</h2>-->
-<!--      <img v-bind:src="preview" />-->
-<!--      <h3 v-if="preview">File name: {{ fileName }}</h3>-->
-<!--    </div>-->
+      <div
+        class="dropzone"
+        @dragover.prevent
+        @dragenter.prevent
+        @dragstart.prevent
+        @drop.prevent="handleFileChange($event.dataTransfer)"
+    >
+      <input
+          id="file-input"
+          type="file"
+          accept="image/png, image/jpeg"
+          @change="handleFileChange($event.target)"
+          required
+      />
+      <h2 for="file-input">Click or Drag N Drop Image</h2>
+      <img v-bind:src="preview" />
+      <h3 v-if="preview">File name: {{ fileName }}</h3>
+    </div>
 
       <label class="create-petition__text" for="body">Содержание петиции</label>
       <textarea class="create-petition__input-text" rows="4" cols="50" id="body" v-model="body"></textarea>

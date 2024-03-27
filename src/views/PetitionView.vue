@@ -6,6 +6,7 @@
       <p class="petition__content">Направлено: {{petition.agency}}</p>
       <p class="petition__content body">{{petition.body}}</p>
       <button @click="sign">Sign petition</button>
+      <button @click="editPetition">Edit</button>
     </section>
 
   </main>
@@ -13,27 +14,33 @@
 
 <script>
 import axios from "axios";
+import petition from "@/api/petition";
 
 export default {
   name: 'PetitionView',
   data() {
     return {
-      petition: {}
+      petition: {},
+      isOwner: false,
     }
   },
   async mounted() {
     let result = await axios.get("http://localhost:8081/api/petition/" + this.$route.params.id,
         {headers: {"Content-Type": "application/json",
-            Authorization: localStorage.getItem('SavedToken')}});
+            /*Authorization: localStorage.getItem('user')*/}});
     this.petition = result.data;
-    console.log(this.petition)
+    console.log(this.petition);
+    if (localStorage.hasOwnProperty('user')) {
+      this.isOwner = (await petition.isMy(this.petition.id)).data.is_owner;
+    }
+    console.log(this.isOwner);
   },
   methods: {
     async sign() {
       await axios.post("http://localhost:8081/api/petition/sign",
           {id: this.petition.id},
           {headers: {"Content-Type": "application/json",
-              Authorization: localStorage.getItem('SavedToken')}})
+              Authorization: localStorage.getItem('user')}})
       .then(() => alert("Successfully signed"))
       .catch(() => alert("Already signed"));
 

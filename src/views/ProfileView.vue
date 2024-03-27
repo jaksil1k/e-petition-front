@@ -5,6 +5,7 @@
       <img src="@/assets/images/default-profile-icon.png" alt="profile image">
       <h1 class="profile__name">Ricardo Milos</h1>
       <button class="button-23" role="button">Edit Profile</button>
+      <button @click="logout" class="button-23" role="button">Logout</button>
     </section>
 
 
@@ -48,7 +49,7 @@ export default {
     async showCreated() {
       let response = await axios.get("http://localhost:8081/api/petition/my",
           {headers: {"Content-Type": "application/json",
-              Authorization: localStorage.getItem('SavedToken')}});
+              Authorization: 'Bearer ' + localStorage.getItem('user')}});
       console.log(response.data);
       this.list = response.data.petitions;
       this.isCreatedListActive = true;
@@ -56,11 +57,15 @@ export default {
     async showSigned() {
       let response = await axios.get("http://localhost:8081/api/petition/signed",
           {headers: {"Content-Type": "application/json",
-              Authorization: localStorage.getItem('SavedToken')}});
+              Authorization: 'Bearer ' + localStorage.getItem('user')}});
       console.log(response.data);
       this.list = response.data.petitions;
       this.isCreatedListActive = false;
     },
+    logout() {
+      localStorage.removeItem("user")
+      window.location.reload();
+    }
   },
   computed: {
     createdListActive() {
@@ -72,10 +77,16 @@ export default {
       return {
         '--underlined': !this.isCreatedListActive ? "#006EFF" : "transparent",
       }
+    },
+    currentUser() {
+      return this.$store.state.auth.status.loggedIn;
     }
   },
   mounted() {
     this.showCreated();
+    if (!this.currentUser) {
+      this.$router.push('/login');
+    }
   }
 }
 </script>
