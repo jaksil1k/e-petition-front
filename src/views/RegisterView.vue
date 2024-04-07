@@ -11,9 +11,8 @@
       <input class="register__input" v-model="surname" type="text" placeholder="Surname" required>
       <input class="register__input" v-model="email" type="text" placeholder="E-mail" required>
       <input class="register__input" v-model="password" type="password" placeholder="Password" required>
-      <div class="register__div-btn">
+<!--      <div class="register__div-btn">-->
         <button class="button-9" role="button">Register</button>
-      </div>
     </form>
   </main>
 </template>
@@ -42,7 +41,7 @@ export default {
       const response = await axios.post('/auth/register', data)
       localStorage.setItem('user', response.data.token)
       this.$store.dispatch('user', response.data.token);
-      this.$route.push({name: 'home'});
+      this.$router.push({name: 'home'});
     }
   }
 }
