@@ -70,7 +70,7 @@ export default {
     }
   },
   async mounted() {
-    let result = await axios.get("http://localhost:8081/api/petition");
+    let result = await axios.get("/petition");
     console.log(result.data);
     this.list = result.data;
   }

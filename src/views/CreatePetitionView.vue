@@ -100,32 +100,19 @@ export default {
     },
     async onSubmit() {
       await this.uploadImage();
-      console.log("uploaded it")
       let data = {
         title: this.title,
         imageId: this.imageId,
         body: this.body,
         agency: this.agency
       }
-      axios.post(
-          "http://127.0.0.1:8081/api/petition"
-          , data
-          ,{headers: {"Content-Type": "application/json",
-              Authorization: localStorage.getItem('SavedToken')}})
-          .then(response => {
-            console.log(response)
-            this.$router.push({name: 'home'})
-          })
-          .catch(e => {
-            console.log(e)
-          })
+      const response = await axios.post("http://127.0.0.1:8081/api/petition", data)
+      console.log(response)
+      this.$router.push({name: 'home'})
+
     }
   },
-  mounted() {
-    if (localStorage.hasOwnProperty("SavedToken") === false) {
-      this.$router.push({name: 'login'})
-    }
-  }
+  mounted() {}
 }
 
 

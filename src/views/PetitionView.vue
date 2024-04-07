@@ -5,8 +5,9 @@
       <p class="petition__content">Создано: {{petition.createdAt}}</p>
       <p class="petition__content">Направлено: {{petition.agency}}</p>
       <p class="petition__content body">{{petition.body}}</p>
+      <p>{{petition}}</p>
       <button @click="sign">Sign petition</button>
-      <button @click="editPetition">Edit</button>
+      <button v-if="isOwner" @click="editPetition">Edit</button>
     </section>
 
   </main>
@@ -15,7 +16,6 @@
 <script>
 import axios from "axios";
 import petition from "@/api/petition";
-
 export default {
   name: 'PetitionView',
   data() {
@@ -25,22 +25,15 @@ export default {
     }
   },
   async mounted() {
-    let result = await axios.get("http://localhost:8081/api/petition/" + this.$route.params.id,
-        {headers: {"Content-Type": "application/json",
-            /*Authorization: localStorage.getItem('user')*/}});
-    this.petition = result.data;
-    console.log(this.petition);
-    if (localStorage.hasOwnProperty('user')) {
+    this.petition = (await petition.getById(this.$route.params.id)).data;
+    console.log(this.petition)
+    if (this.$store.getters.token) {
       this.isOwner = (await petition.isMy(this.petition.id)).data.is_owner;
     }
-    console.log(this.isOwner);
   },
   methods: {
-    async sign() {
-      await axios.post("http://localhost:8081/api/petition/sign",
-          {id: this.petition.id},
-          {headers: {"Content-Type": "application/json",
-              Authorization: localStorage.getItem('user')}})
+    sign() {
+      axios.post("/petition/sign", {id: this.petition.id})
       .then(() => alert("Successfully signed"))
       .catch(() => alert("Already signed"));
 

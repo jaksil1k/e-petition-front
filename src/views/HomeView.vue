@@ -54,15 +54,12 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import axios from "axios";
 
 export default {
 
   name: 'HomeView',
   components: {
-    HelloWorld
   },
   data() {
     return {
@@ -74,11 +71,10 @@ export default {
       this.$router.push({name: 'petition_view', params: {id: id}})
     }
   },
-
-  async mounted() {
-    let result = await axios.get("http://localhost:8081/api/petition");
-    console.log(result.data);
-    this.list = result.data;
+  mounted() {
+    axios.get("/petition")
+        .then(result => this.list = result.data)
+        .catch(e => console.log(e))
     // document.getElementById("ItemPreview").src = URL.createObjectURL(result.data[0].img.imageData);
         //"data:"  + result.data[0].img.type + ";base64," + result.data[0].img.imageData;
   }

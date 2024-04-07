@@ -6,9 +6,9 @@
       <p class="login__or-p">Or</p>
     </div>
     <form class="login__form"
-          @submit = "onSubmit">
-      <input class="login__input" v-model="user.email" type="text" placeholder="E-mail" required>
-      <input class="login__input" v-model="user.password" type="password" placeholder="Password" required>
+          @submit.prevent = "onSubmit">
+      <input class="login__input" v-model="email" type="text" placeholder="E-mail" required>
+      <input class="login__input" v-model="password" type="password" placeholder="Password" required>
         <button class="button-9" role="button">Login</button>
     </form>
   </main>
@@ -16,51 +16,20 @@
 
 <script>
 import axios from "axios";
-import User from "@/models/user";
 export default {
   name: 'LoginView',
   data() {
     return {
-      user: new User('', '', ''),
-    }
-  },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    }
-  },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push('/profile');
+      email: '',
+      password: '',
     }
   },
   methods: {
     async onSubmit() {
-
-      this.$store.dispatch('auth/login', this.user).then(
-          () => {
-            this.$router.push('/profile');
-          },error => {
-            console.log(error)
-          }
-      )
-      // const credentials = this.user;
-      // await axios.post(
-      //     'http://127.0.0.1:8081/api/auth/login',
-      //     credentials,
-      //     {
-      //       headers: {"Content-Type": "application/json"},
-      //     },)
-      //     .then(response => {
-      //       // console.log(response.data.token);
-      //       localStorage.setItem('user', response.data.token);
-      //       // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-      //       this.$router.push({name: 'home'})
-      //     })
-      //     .catch(e => {
-      //       console.log(e)
-      //     });
-
+      const response = await axios.post("/auth/login", {email: this.email, password: this.password});
+      localStorage.setItem('user', response.data.token);
+      this.$store.dispatch('token', response.data.token);
+      this.$router.push({name: 'home'});
     }
   }
 }

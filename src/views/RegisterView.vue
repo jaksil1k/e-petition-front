@@ -39,21 +39,10 @@ export default {
         password: this.password,
       }
 
-      await axios.post(
-          'http://127.0.0.1:8081/api/auth/register',
-          data,
-          {headers: {"Content-Type": "application/json"}})
-          .then(response => {
-            let token = response.data.token;
-            localStorage.setItem("SavedToken", 'Bearer ' + token);
-            // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-            this.$router.push({name: 'home'})
-          })
-          .catch(e => {
-            console.log(e)
-          });
-      // this.$store.dispatch()
-      this.$route
+      const response = await axios.post('/auth/register', data)
+      localStorage.setItem('user', response.data.token)
+      this.$store.dispatch('user', response.data.token);
+      this.$route.push({name: 'home'});
     }
   }
 }

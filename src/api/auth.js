@@ -1,11 +1,11 @@
-import axios from "@/api/axios";
+import axios from "axios";
 
 const register = (credentials) => {
-    return axios.post("/auth/register", { user: credentials });
+    return axios.post("/auth/register", { credentials });
 };
 
 const login = (credentials) => {
-    return axios.post("auth/login", { user: credentials });
+    return axios.post("/auth/login", { credentials });
 }
 
 export default {

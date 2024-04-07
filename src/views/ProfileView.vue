@@ -5,7 +5,6 @@
       <img src="@/assets/images/default-profile-icon.png" alt="profile image">
       <h1 class="profile__name">Ricardo Milos</h1>
       <button class="button-23" role="button">Edit Profile</button>
-      <button @click="logout" class="button-23" role="button">Logout</button>
     </section>
 
 
@@ -31,7 +30,6 @@
 </template>
 
 <script>
-import { API } from "@/http-common";
 import axios from "axios";
 
 export default {
@@ -39,6 +37,8 @@ export default {
   data() {
     return {
       list: [],
+      signedList: [],
+      createdList: [],
       isCreatedListActive: true,
     }
   },
@@ -47,24 +47,16 @@ export default {
       this.$router.push({name: 'petition_view', params: {id: id}})
     },
     async showCreated() {
-      let response = await axios.get("http://localhost:8081/api/petition/my",
-          {headers: {"Content-Type": "application/json",
-              Authorization: 'Bearer ' + localStorage.getItem('user')}});
-      console.log(response.data);
-      this.list = response.data.petitions;
+      if (this.createdList.length === 0)
+        this.createdList = (await axios.get("/petition/my")).data;
+      this.list = this.createdList;
       this.isCreatedListActive = true;
     },
     async showSigned() {
-      let response = await axios.get("http://localhost:8081/api/petition/signed",
-          {headers: {"Content-Type": "application/json",
-              Authorization: 'Bearer ' + localStorage.getItem('user')}});
-      console.log(response.data);
-      this.list = response.data.petitions;
+      if (this.signedList.length === 0)
+        this.signedList = (await axios.get("/petition/signed")).data;
+      this.list = this.signedList;
       this.isCreatedListActive = false;
-    },
-    logout() {
-      localStorage.removeItem("user")
-      window.location.reload();
     }
   },
   computed: {
@@ -78,15 +70,12 @@ export default {
         '--underlined': !this.isCreatedListActive ? "#006EFF" : "transparent",
       }
     },
-    currentUser() {
-      return this.$store.state.auth.status.loggedIn;
-    }
   },
   mounted() {
-    this.showCreated();
-    if (!this.currentUser) {
+    if (!this.$store.getters.token) {
       this.$router.push('/login');
     }
+    this.showCreated();
   }
 }
 </script>
