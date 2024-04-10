@@ -42,35 +42,30 @@ export default {
       title: '',
       agency: '',
       body: '',
-      imageId: null,
+      fileId: null,
     };
   },
   methods: {
     uploadImage(){
       let data = new FormData();
-      data.append("image", this.$store.getters.image);
-      console.log(data);
-      return axios.post("/image", data, {headers: {"Content-Type": "multipart/form-data"}});
+      data.append("file", this.$store.getters.image);
+      return axios.post("/file", data, {headers: {'Content-Type': 'multipart/form-data'}});
     },
     async onSubmit() {
-      const imageId = await this.uploadImage();
-      console.log(imageId);
+      this.fileId = (await this.uploadImage()).data.id;
       let data = {
         title: this.title,
-        imageId: imageId,
+        fileId: this.fileId,
         body: this.body,
         agency: this.agency
       }
       const response = await axios.post("/petition", data)
-      console.log(response)
       this.$router.push({name: 'home'})
     }
   },
   mounted() {}
 }
 
-
-//image/jpeg;base64,
 </script>
 
 <style scoped>

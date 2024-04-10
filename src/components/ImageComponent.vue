@@ -18,15 +18,12 @@ export default {
       const image = e.target.files[0];
       this.$store.dispatch('image', image);
 
-      // const reader = new FileReader();
-      // reader.readAsDataURL(image);
-      // reader.onload = e =>{
-      //   this.previewImage = e.target.data;
-      //   console.log(e.target.result);
-      // };
-
-
-      this.previewImage = URL.createObjectURL(image);
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = e =>{
+        this.previewImage = e.target.result;
+        // console.log(e.target.data);
+      };
     }
   },
   computed: {

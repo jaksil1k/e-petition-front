@@ -5,10 +5,11 @@
       <p class="petition__content">Создано: {{petition.createdAt}}</p>
       <p class="petition__content">Направлено: {{petition.agency}}</p>
       <p class="petition__content body">{{petition.body}}</p>
-      <p>{{petition}}</p>
       <button @click="sign">Sign petition</button>
       <button v-if="isOwner" @click="editPetition">Edit</button>
+      <img :src="'http://localhost:8081/api/file/' + fileId" alt="no image">
     </section>
+
 
   </main>
 </template>
@@ -22,20 +23,29 @@ export default {
     return {
       petition: {},
       isOwner: false,
+      fileId: '',
     }
   },
   async mounted() {
     this.petition = (await petition.getById(this.$route.params.id)).data;
-    console.log(this.petition)
+    console.log(this.petition.file.id)
+    this.fileId = this.petition.file.id;
     if (this.$store.getters.token) {
       this.isOwner = (await petition.isMy(this.petition.id)).data.is_owner;
     }
+
   },
   methods: {
     sign() {
-      axios.post("/petition/sign", {id: this.petition.id})
+      axios.post("/petition/signEds", {
+        petition_id: this.petition.id,
+        certificate_store: this.certificate,
+        password: this.password
+      })
       .then(() => alert("Successfully signed"))
       .catch(() => alert("Already signed"));
+    },
+    clickSign() {
 
     }
   }
