@@ -5,25 +5,35 @@
       <p class="petition__content">Создано: {{petition.createdAt}}</p>
       <p class="petition__content">Направлено: {{petition.agency}}</p>
       <p class="petition__content body">{{petition.body}}</p>
-      <button @click="sign">Sign petition</button>
+
+      <button type="button" @click="showModal">Sign petition</button>
+
       <button v-if="isOwner" @click="editPetition">Edit</button>
       <img :src="'http://localhost:8081/api/file/' + fileId" alt="no image">
+
+      <Modal
+          v-show="isModalVisible"
+          @close="closeModal"
+      />
+
+      <input type="file">
     </section>
-
-
   </main>
 </template>
 
 <script>
 import axios from "axios";
 import petition from "@/api/petition";
+import Modal from "@/components/ModalComponent";
 export default {
   name: 'PetitionView',
+  components: {Modal},
   data() {
     return {
       petition: {},
       isOwner: false,
       fileId: '',
+      isModalVisible: false,
     }
   },
   async mounted() {
@@ -36,17 +46,11 @@ export default {
 
   },
   methods: {
-    sign() {
-      axios.post("/petition/signEds", {
-        petition_id: this.petition.id,
-        certificate_store: this.certificate,
-        password: this.password
-      })
-      .then(() => alert("Successfully signed"))
-      .catch(() => alert("Already signed"));
+    showModal() {
+      this.isModalVisible = true;
     },
-    clickSign() {
-
+    closeModal() {
+      this.isModalVisible = false;
     }
   }
 }
