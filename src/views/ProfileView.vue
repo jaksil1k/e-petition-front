@@ -3,8 +3,8 @@
 
     <section class="profile">
       <img src="@/assets/images/default-profile-icon.png" alt="profile image">
-      <h1 class="profile__name">Ricardo Milos</h1>
-      <button class="button-23" role="button">Edit Profile</button>
+      <h1 class="profile__name">{{user.name}}</h1>
+      <button class="button-23" role="button" @click="$router.push({name: 'change-profile'})">Edit Profile</button>
     </section>
 
 
@@ -40,6 +40,7 @@ export default {
       signedList: [],
       createdList: [],
       isCreatedListActive: true,
+      user: {}
     }
   },
   methods: {
@@ -49,15 +50,18 @@ export default {
     async showCreated() {
       if (this.createdList.length === 0)
         this.createdList = (await axios.get("/petition/my")).data;
-      this.list = this.createdList;
+      this.list = this.createdList.petitions;
       this.isCreatedListActive = true;
     },
     async showSigned() {
       if (this.signedList.length === 0)
         this.signedList = (await axios.get("/petition/signed")).data;
-      this.list = this.signedList;
+      this.list = this.signedList.petitions;
       this.isCreatedListActive = false;
-    }
+    },
+    async getCurrentUser() {
+      return (await axios.get("/user/data")).data
+    },
   },
   computed: {
     createdListActive() {
@@ -75,6 +79,8 @@ export default {
     if (!this.$store.getters.token) {
       this.$router.push('/login');
     }
+    this.getCurrentUser()
+        .then(res => this.user = res);
     this.showCreated();
   }
 }

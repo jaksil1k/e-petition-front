@@ -6,6 +6,7 @@ import RegisterView from "@/views/RegisterView";
 import LoginView from "@/views/LoginView";
 import PetitionView from "@/views/PetitionView";
 import PetitionsView from "@/views/PetitionsView";
+import ChangeUserView from "@/views/ChangeUserView";
 
 
 const routes = [
@@ -30,6 +31,11 @@ const routes = [
     component: ProfileView
   },
   {
+    path: '/change-profile',
+    name: 'change-profile',
+    component: ChangeUserView
+  },
+  {
     path: '/register',
     name: 'register',
     component: RegisterView
@@ -42,7 +48,7 @@ const routes = [
   {
     path: '/petitions/:id',
     name: 'petition_view',
-    component: PetitionView,
+    component: PetitionView
   },
   {
     path: '/petitions',
