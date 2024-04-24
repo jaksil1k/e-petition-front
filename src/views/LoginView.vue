@@ -16,6 +16,7 @@
 
 <script>
 import axios from "axios";
+import {toast} from "vue3-toastify";
 export default {
   name: 'LoginView',
   data() {
@@ -25,11 +26,25 @@ export default {
     }
   },
   methods: {
-    async onSubmit() {
-      const response = await axios.post("/auth/login", {email: this.email, password: this.password});
-      localStorage.setItem('user', response.data.token);
-      this.$store.dispatch('token', response.data.token);
-      this.$router.push({name: 'home'});
+    onSubmit() {
+      axios.post("/auth/login", {email: this.email, password: this.password})
+      .then(response => {
+        localStorage.setItem('user', response.data.token);
+        this.$store.dispatch('token', response.data.token);
+        this.$router.push({name: 'home'});
+      })
+      .catch(error => {
+        if (error.response.data.message) {
+          toast(error.response.data.message, {
+            "theme": "auto",
+            "type": "error",
+            "dangerouslyHTMLString": true
+          });
+        }
+        else {
+          throw error;
+        }
+      });
     }
   }
 }

@@ -56,26 +56,41 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    async signPetition(req) {
+    signPetition(req) {
       if (!req.esp || !req.password) {
-        console.log(req.esp);
+        toast("ЭЦП или пароля нету", {
+          "theme": "auto",
+          "type": "error",
+          "dangerouslyHTMLString": true
+        });
         return;
       }
-      const response = await axios.post("/petition/signEds", {
+      axios.post("/petition/signEds", {
         petitionId: this.petition.id,
         certificate_store: req.esp,
         password: req.password
       })
-      console.log(response);
+      .then((response) => {
+        toast(response.data.msg, {
+          "theme": "auto",
+          "type": "success",
+          "dangerouslyHTMLString": true
+        });
+      })
+      .catch(error => {
+        if (error.response.data.message) {
+          toast(error.response.data.message, {
+            "theme": "auto",
+            "type": "error",
+            "dangerouslyHTMLString": true
+          });
+        }
+        else {
+          throw error;
+        }
+      })
       this.closeModal();
     },
-    showAlert() {
-      toast("Success", {
-        "theme": "auto",
-        "type": "success",
-        "dangerouslyHTMLString": true
-      })
-    }
   },
   computed: {
     getFile() {

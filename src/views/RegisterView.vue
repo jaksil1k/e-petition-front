@@ -52,8 +52,9 @@ export default {
             "theme": "auto",
             "type": "error",
             "dangerouslyHTMLString": true
-          })
-        } else {
+          });
+        }
+        else {
           throw error;
         }
       });

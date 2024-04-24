@@ -28,7 +28,7 @@
             id="modalDescription"
         >
           <slot name="body" class="sign">
-            <form @click="signPetition" class="sign-form">
+            <form @submit.prevent="signPetition" class="sign-form">
               <input @change="uploadFile" type="file" class="sign-form__input" accept="application/x-pkcs12" required>
               <input v-model="password" type="password" class="sign-form__input" placeholder="password" required>
               <button class="sign-form__btn">Подписать</button>
@@ -68,7 +68,6 @@ export default {
       this.$emit('close');
     },
     async uploadFile(e) {
-      e.preventDefault();
       this.esp = (await this.fileToBase64(e.target.files[0])).replace("data:application/x-pkcs12;base64,", "");
     },
     async fileToBase64(file) {
