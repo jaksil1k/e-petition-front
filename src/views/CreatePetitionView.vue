@@ -59,9 +59,9 @@ export default {
         body: this.body,
         agency: this.agency
       }
-      const response = await axios.post("/petition", data)
+      await axios.post("/petition", data)
       this.$router.push({name: 'home'})
-    }
+    },
   },
   mounted() {}
 }

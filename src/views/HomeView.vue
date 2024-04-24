@@ -75,8 +75,6 @@ export default {
     axios.get("/petition")
         .then(result => this.list = result.data)
         .catch(e => console.log(e))
-    // document.getElementById("ItemPreview").src = URL.createObjectURL(result.data[0].img.imageData);
-        //"data:"  + result.data[0].img.type + ";base64," + result.data[0].img.imageData;
   }
 
 }

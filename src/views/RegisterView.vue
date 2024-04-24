@@ -7,10 +7,10 @@
     </div>
     <form class="register__form"
     @submit.prevent = "onSubmit">
-      <input class="register__input" v-model="name" type="text" placeholder="Name" required>
-      <input class="register__input" v-model="surname" type="text" placeholder="Surname" required>
-      <input class="register__input" v-model="email" type="text" placeholder="E-mail" required>
-      <input class="register__input" v-model="password" type="password" placeholder="Password" required>
+      <input class="register__input" v-model="name" type="text" placeholder="Name" required/>
+      <input class="register__input" v-model="surname" type="text" placeholder="Surname" required/>
+      <input class="register__input" v-model="email" type="text" placeholder="E-mail" required/>
+      <input class="register__input" v-model="password" type="password" placeholder="Password" required/>
       <button class="button-9" role="button">Register</button>
     </form>
   </main>
@@ -18,6 +18,7 @@
 
 <script>
 import axios from "axios";
+import {toast} from "vue3-toastify";
 
 export default {
   name: 'RegisterView',
@@ -25,23 +26,38 @@ export default {
     return {
       name: "",
       surname: "",
+      iin: "",
       email: "",
       password: "",
     }
   },
   methods: {
-    async onSubmit() {
+    onSubmit() {
       let data = {
         name: this.name + " " + this.surname,
+        iin: this.iin,
         email: this.email,
         password: this.password,
       }
 
-      const response = await axios.post('/auth/register', data)
-      localStorage.setItem('user', response.data.token)
-      this.$store.dispatch('user', response.data.token);
-      this.$router.push({name: 'main'});
-    }
+      axios.post('/auth/register', data)
+      .then(response => {
+        localStorage.setItem('user', response.data.token)
+        this.$store.dispatch('user', response.data.token);
+        this.$router.push({name: 'main'});
+      })
+      .catch(error => {
+        if (error.response.data.message) {
+          toast(error.response.data.message, {
+            "theme": "auto",
+            "type": "error",
+            "dangerouslyHTMLString": true
+          })
+        } else {
+          throw error;
+        }
+      });
+    },
   }
 }
 </script>
@@ -49,6 +65,7 @@ export default {
 <style scoped>
 .register {
   height: 100vh;
+  margin-top: 4rem;
   width: 40%;
   display: flex;
   align-items: center;

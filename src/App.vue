@@ -8,18 +8,6 @@
   <Footer />
 </template>
 
-<style>
-@import './assets/css/main.css';
-@import './assets/css/reset.css';
-@import './assets/css/typography.css';
-@import './assets/css/header.css';
-@import './assets/css/footer.css';
-
-
-
-</style>
-
-
 <script>
 import Nav from '@/components/Nav'
 import Footer from "@/components/Footer";
@@ -34,3 +22,12 @@ export default {
   },
 }
 </script>
+
+<style>
+@import './assets/css/main.css';
+@import './assets/css/reset.css';
+@import './assets/css/typography.css';
+@import './assets/css/header.css';
+@import './assets/css/footer.css';
+
+</style>

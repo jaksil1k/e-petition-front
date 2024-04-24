@@ -4,10 +4,12 @@ export default createStore({
   state: {
     token: null,
     image: null,
+    esp: null,
   },
   getters: {
     token: state => state.token,
     image: state => state.image,
+    esp: state => state.esp,
   },
   mutations: {
     token(state, token) {
@@ -15,6 +17,9 @@ export default createStore({
     },
     image(state, image) {
       state.image = image;
+    },
+    esp(state, esp) {
+      state.esp = esp;
     }
   },
   actions: {
@@ -22,8 +27,11 @@ export default createStore({
       context.commit('token', token);
     },
     image(context, image) {
-      context.commit('image',  image)
+      context.commit('image',  image);
     },
+    esp(context, esp) {
+      context.commit('esp', esp);
+    }
   },
   modules: {}
 })

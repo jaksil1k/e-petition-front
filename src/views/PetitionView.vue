@@ -7,24 +7,26 @@
       <p class="petition__content body">{{petition.body}}</p>
 
       <button type="button" @click="showModal">Sign petition</button>
+      <button type="button" @click="showAlert">alert</button>
 
-      <button v-if="isOwner" @click="editPetition">Edit</button>
-      <img :src="'http://localhost:8081/api/file/' + fileId" alt="no image">
+<!--      <button v-if="isOwner" @click="editPetition">Edit</button>-->
+      <img :src="fileUrl" alt="no image">
 
       <Modal
           v-show="isModalVisible"
           @close="closeModal"
+          @sign="signPetition"
       />
-
-      <input type="file">
     </section>
+    {{getFile}}
   </main>
 </template>
 
 <script>
-import axios from "axios";
-import petition from "@/api/petition";
+import petitionApi from "@/api/petitionApi";
 import Modal from "@/components/ModalComponent";
+import axios from "axios";
+import {toast} from "vue3-toastify";
 export default {
   name: 'PetitionView',
   components: {Modal},
@@ -32,16 +34,18 @@ export default {
     return {
       petition: {},
       isOwner: false,
-      fileId: '',
+      fileUrl: '',
       isModalVisible: false,
     }
   },
   async mounted() {
-    this.petition = (await petition.getById(this.$route.params.id)).data;
+    const json = await petitionApi.getById(this.$route.params.id)
+    console.log(json);
+    this.petition = json.data;
     console.log(this.petition.file.id)
-    this.fileId = this.petition.file.id;
+    this.fileUrl = 'http://localhost:8081/api/file/' + this.petition.file.id;
     if (this.$store.getters.token) {
-      this.isOwner = (await petition.isMy(this.petition.id)).data.is_owner;
+      this.isOwner = (await petitionApi.isMy(this.petition.id)).data.is_owner;
     }
 
   },
@@ -51,6 +55,31 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    async signPetition(req) {
+      if (!req.esp || !req.password) {
+        console.log(req.esp);
+        return;
+      }
+      const response = await axios.post("/petition/signEds", {
+        petitionId: this.petition.id,
+        certificate_store: req.esp,
+        password: req.password
+      })
+      console.log(response);
+      this.closeModal();
+    },
+    showAlert() {
+      toast("Success", {
+        "theme": "auto",
+        "type": "success",
+        "dangerouslyHTMLString": true
+      })
+    }
+  },
+  computed: {
+    getFile() {
+      return this.$store.getters.esp;
     }
   }
 }
@@ -63,7 +92,7 @@ export default {
   height: 100vh;
 }
 .petition {
-  width: 40%;
+  width: 50%;
 }
 .petition__title {
   font-size: xx-large;

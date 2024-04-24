@@ -28,9 +28,9 @@
             id="modalDescription"
         >
           <slot name="body" class="sign">
-            <form @click.prevent="" class="sign-form">
-              <input @change="uploadFile" type="file" class="sign-form__input">
-              <input v-model="password" type="password" class="sign-form__input" placeholder="password">
+            <form @click="signPetition" class="sign-form">
+              <input @change="uploadFile" type="file" class="sign-form__input" accept="application/x-pkcs12" required>
+              <input v-model="password" type="password" class="sign-form__input" placeholder="password" required>
               <button class="sign-form__btn">Подписать</button>
             </form>
           </slot>
@@ -54,21 +54,42 @@
 </template>
 
 <script>
+
 export default {
   name: 'Modal',
   data() {
     return {
-      file: null,
-      password: ''
+      password: '',
+      esp: null
     }
   },
   methods: {
     close() {
       this.$emit('close');
     },
-    uploadFile() {
-      this.file = this.$refs.file.files[0];
-    }
+    async uploadFile(e) {
+      e.preventDefault();
+      this.esp = (await this.fileToBase64(e.target.files[0])).replace("data:application/x-pkcs12;base64,", "");
+    },
+    async fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        if (!file.type.match('x-pkcs12')) {
+          return reject(new Error('INVALID_FILE'));
+        }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function() {
+          const base64data = reader.result;
+          resolve(base64data);
+        };
+      });
+    },
+    signPetition() {
+      this.$emit('sign', {
+        esp: this.esp,
+        password: this.password
+      });
+    },
   },
 };
 </script>
