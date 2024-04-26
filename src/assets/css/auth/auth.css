@@ -1,0 +1,63 @@
+.auth {
+    height: 100vh;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 3rem;
+}
+
+.auth__form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth__input {
+    padding: 1rem;
+    font-size: 2rem;
+    border-color: rgba(77, 77, 77, 0.6);
+}
+
+.auth__input:not(:nth-last-child(-n + 2)) {
+    border-bottom: 0;
+}
+.auth__input:nth-last-child(-n + 2) {
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.auth__input:nth-child(1) {
+    border-top-right-radius: 7px;
+    border-top-left-radius: 7px;
+}
+.auth__or-p {
+    color: #929292;
+
+    margin-top: 2rem;
+    font-size: x-large;
+}
+
+.auth__h1 {
+    font-size: xx-large;
+}
+
+.auth__h2 {
+    margin-top: 1rem;
+}
+.auth__h2>a {
+    color: #006EFF;
+}
+
+.button-9 {
+    background: 0 rgba(0, 110, 255, 0.6);
+    border-radius: 7px;
+    width: 100%;
+}
+
+.button-9:disabled {
+    cursor: default;
+}
+
+.button-9:focus {
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+}

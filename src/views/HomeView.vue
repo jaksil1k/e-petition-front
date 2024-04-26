@@ -1,5 +1,5 @@
 <template>
-
+<main>
   <section class="poster">
     <h1 class="poster__title">The way to change your future</h1>
     <p class="poster__text">200 000 people are already changing a future of their country</p>
@@ -49,17 +49,20 @@
       </li>
     </ul>
   </section>
-
+</main>
+  <Footer />
 
 </template>
 
 <script>
 import axios from "axios";
+import Footer from "@/components/Footer";
 
 export default {
 
   name: 'HomeView',
   components: {
+    Footer
   },
   data() {
     return {

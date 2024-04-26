@@ -95,6 +95,8 @@ export default {
 <style scoped>
 @import "../assets/css/create-petition/form.css";
 
-
+.create-petition__form {
+  margin-bottom: 10rem;
+}
 </style>
 
