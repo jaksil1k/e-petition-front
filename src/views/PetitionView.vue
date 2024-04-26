@@ -102,11 +102,6 @@ export default {
       this.closeModal();
     },
   },
-  computed: {
-    getFile() {
-      return this.$store.getters.esp;
-    }
-  },
   async mounted() {
     const res = await petitionApi.getById(this.$route.params.id)
     // console.log(json);
@@ -125,13 +120,10 @@ export default {
 
 <style scoped>
 @import "/src/assets/css/auth/auth.css";
-.auth {
-  margin-top: 10rem;
-}
-
 .petition__img {
   width: 40%;
   height: 30%;
+  margin-bottom: 1rem;
 }
 .petition__img-div {
   margin-top: 7rem;
@@ -141,12 +133,13 @@ export default {
 .petition-page {
   display: flex;
   height: 100vh;
-  width: 60%;
+  max-width: 60%;
   margin-left: 30%;
   margin-right: 10%;
 }
 .petition {
-  width: 70%;
+  max-width: 50%;
+  align-items: center;
 }
 .petition__title {
   font-size: xx-large;
@@ -158,7 +151,11 @@ export default {
 .petition .body {
   margin-top: 2rem;
 }
-
+.auth {
+  margin-top: 7rem;
+  width: 50%;
+  align-items: initial;
+}
 .button-9 {
   margin-top: 10%;
   max-width: 300px;
