@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 axios.defaults.baseURL = 'http://localhost:8081/api'
 
 axios.interceptors.request.use(function (config) {
@@ -7,4 +8,3 @@ axios.interceptors.request.use(function (config) {
     config.headers.Authorization =  token ? `Bearer ${token}` : '';
     return config;
 });
-

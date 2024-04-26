@@ -26,7 +26,7 @@
       </div>
     </div>
   </section>
-  <section class="breadcrumb">
+  <section class="breadcrumb" v-if="loaded">
     <h3 class="breadcrumb__title">
       Petitions
     </h3>
@@ -57,7 +57,7 @@
 <script>
 import axios from "axios";
 import Footer from "@/components/Footer";
-
+import baseUrl from "@/api/axios.js"
 export default {
 
   name: 'HomeView',
@@ -67,6 +67,7 @@ export default {
   data() {
     return {
       list: [],
+      loaded: false,
     }
   },
   methods: {
@@ -76,7 +77,15 @@ export default {
   },
   mounted() {
     axios.get("/petition")
-        .then(result => this.list = result.data)
+        .then(result => {
+          this.list = result.data
+          // console.log(this.list)
+          // for (let i = 0;i < this.list.length;++i) {
+          //   this.list[0].imageUrl = baseUrl.toString() + '/files/' + this.list.fileId;
+          //   console.log(this.list[0].imageUrl);
+          // }
+          this.loaded = true;
+        })
         .catch(e => console.log(e))
   }
 

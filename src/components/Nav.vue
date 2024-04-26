@@ -16,7 +16,7 @@ export default {
     logout() {
       localStorage.removeItem('user');
       this.$store.dispatch('token', null);
-      this.$router.push({name: 'home'});
+      location.reload();
     },
   },
   computed: {

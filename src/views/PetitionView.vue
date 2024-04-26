@@ -1,24 +1,32 @@
 <template>
   <main class="petition-page">
     <section class="petition">
+      <div class="petition__img-div">
+        <img class="petition__img" :src="fileUrl" alt="no image">
+      </div>
       <h1 class="petition__title">{{petition.title}}</h1>
       <p class="petition__content">Создано: {{petition.createdAt}}</p>
       <p class="petition__content">Направлено: {{petition.agency}}</p>
       <p class="petition__content body">{{petition.body}}</p>
-
-      <button type="button" @click="showModal">Sign petition</button>
-      <button type="button" @click="showAlert">alert</button>
-
-<!--      <button v-if="isOwner" @click="editPetition">Edit</button>-->
-      <img :src="fileUrl" alt="no image">
-
+    </section>
+    <section class="auth" v-if="!isAuth">
+      <div v-if="!isRegistered">
+        <h2 class="auth__h2">Already registered? <a @click="showLogin" href="javascript:void(0)">Sign in</a></h2>
+        <Register @registerSuccess="showSign"/>
+      </div>
+      <div v-if="isRegistered">
+        <h2 class="auth__h2">Haven't registered yet? <a @click="showRegister" href="javascript:void(0)">Sign up</a></h2>
+        <Login @loginSuccess="showSign"/>
+      </div>
+    </section>
+    <section class="sign" v-if="isAuth">
       <Modal
           v-show="isModalVisible"
           @close="closeModal"
           @sign="signPetition"
       />
+      <button class="button-9" type="button" @click="showModal">Sign petition</button>
     </section>
-    {{getFile}}
   </main>
 </template>
 
@@ -27,27 +35,20 @@ import petitionApi from "@/api/petitionApi";
 import Modal from "@/components/ModalComponent";
 import axios from "axios";
 import {toast} from "vue3-toastify";
+import Register from "@/components/RegisterComponent";
+import Login from "@/components/LoginComponent";
 export default {
   name: 'PetitionView',
-  components: {Modal},
+  components: {Login, Register, Modal},
   data() {
     return {
       petition: {},
       isOwner: false,
       fileUrl: '',
       isModalVisible: false,
+      isAuth: false,
+      isRegistered: false,
     }
-  },
-  async mounted() {
-    const json = await petitionApi.getById(this.$route.params.id)
-    console.log(json);
-    this.petition = json.data;
-    console.log(this.petition.file.id)
-    this.fileUrl = 'http://localhost:8081/api/file/' + this.petition.file.id;
-    if (this.$store.getters.token) {
-      this.isOwner = (await petitionApi.isMy(this.petition.id)).data.is_owner;
-    }
-
   },
   methods: {
     showModal() {
@@ -55,6 +56,15 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    showSign() {
+      this.isAuth = true;
+    },
+    showLogin() {
+      this.isRegistered = true;
+    },
+    showRegister() {
+      this.isRegistered = false;
     },
     signPetition(req) {
       if (!req.esp || !req.password) {
@@ -96,18 +106,47 @@ export default {
     getFile() {
       return this.$store.getters.esp;
     }
-  }
+  },
+  async mounted() {
+    const res = await petitionApi.getById(this.$route.params.id)
+    // console.log(json);
+    this.petition = res.data;
+    // console.log(this.petition.file.id)
+    this.fileUrl = axios.defaults.baseURL + '/file/' + this.petition.file.id;
+    if (localStorage.getItem('user')) {
+      this.isAuth = true;
+    }
+    if (this.$store.getters.token) {
+      this.isOwner = (await petitionApi.isMy(this.petition.id)).data.is_owner;
+    }
+  },
 }
 </script>
 
 <style scoped>
+@import "/src/assets/css/auth/auth.css";
+.auth {
+  margin-top: 10rem;
+}
+
+.petition__img {
+  width: 40%;
+  height: 30%;
+}
+.petition__img-div {
+  margin-top: 7rem;
+  max-width: 500px;
+  max-height: 200px;
+}
 .petition-page {
   display: flex;
-  justify-content: center;
   height: 100vh;
+  width: 60%;
+  margin-left: 30%;
+  margin-right: 10%;
 }
 .petition {
-  width: 50%;
+  width: 70%;
 }
 .petition__title {
   font-size: xx-large;
@@ -118,5 +157,10 @@ export default {
 }
 .petition .body {
   margin-top: 2rem;
+}
+
+.button-9 {
+  margin-top: 10%;
+  max-width: 300px;
 }
 </style>
