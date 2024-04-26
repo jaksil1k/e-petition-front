@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      localStorage.removeItem('user');
       axios.post("/auth/login", {email: this.email, password: this.password})
       .then(response => {
         localStorage.setItem('user', response.data.token);
@@ -34,7 +35,7 @@ export default {
         this.$router.push({name: 'home'});
       })
       .catch(error => {
-        if (error.response.data.message) {
+        if (error.response && error.response.data.message) {
           toast(error.response.data.message, {
             "theme": "auto",
             "type": "error",

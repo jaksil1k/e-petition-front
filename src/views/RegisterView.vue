@@ -39,23 +39,21 @@ export default {
         email: this.email,
         password: this.password,
       }
-
+      localStorage.removeItem('user');
       axios.post('/auth/register', data)
       .then(response => {
         localStorage.setItem('user', response.data.token)
         this.$store.dispatch('user', response.data.token);
-        this.$router.push({name: 'main'});
+        this.$router.push({name: 'home'});
       })
       .catch(error => {
-        if (error.response.data.message) {
+
+        if (error.response && error.response.data.message) {
           toast(error.response.data.message, {
             "theme": "auto",
             "type": "error",
             "dangerouslyHTMLString": true
           });
-        }
-        else {
-          throw error;
         }
       });
     },

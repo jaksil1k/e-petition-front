@@ -1,22 +1,31 @@
 <template>
   <section class="create-petition">
-    <h1 class="create-petition__title">
-      Create your petition
-    </h1>
+    <div class="create-petition__title">
+      <h1 class="create-petition__h1">
+        Создайте петицию
+      </h1>
+    </div>
     <form class="create-petition__form"
           @submit.prevent="onSubmit">
 
-      <label class="create-petition__text" for="state-body">Наименование государственного органа, местного представительного и (или) исполнительного органа.</label>
-      <input v-model="agency" class="create-petition__input-text" type="text" id="state-body"/>
+      <div class="create-petition__form-div">
+        <label class="create-petition__text" for="state-body">Государтвенный орган</label>
+        <input v-model="agency" class="create-petition__input-text" type="text" id="state-body" required/>
+      </div>
 
-      <label class="create-petition__text" for="title">Заголовок петиции</label>
-      <input v-model="title" class="create-petition__input-text" type="text" id="title">
+      <div class="create-petition__form-div">
+        <label class="create-petition__text" for="title">Заголовок петиции</label>
+        <input v-model="title" class="create-petition__input-text" type="text" id="title" required/>
+      </div>
 
+      <div class="create-petition__form-div">
+        <image-component/>
+      </div>
 
-      <image-component/>
-
-      <label class="create-petition__text" for="body">Содержание петиции</label>
-      <textarea class="create-petition__input-text" rows="4" cols="50" id="body" v-model="body"></textarea>
+      <div class="create-petition__form-div">
+        <label class="create-petition__text" for="body">Содержание петиции</label>
+        <textarea class="create-petition__input-text" rows="4" cols="50" id="body" v-model="body" required/>
+      </div>
 
       <div class="create-petition__div-btn">
         <button class="button-9" role="button">Create</button>
@@ -31,6 +40,7 @@
 import DragDropImageInput from "@/components/DragDropImageInput";
 import axios from 'axios'
 import ImageComponent from "@/components/ImageComponent";
+import {toast} from "vue3-toastify";
 export default {
   name: 'CreatePetition',
   components: {
@@ -46,61 +56,44 @@ export default {
     };
   },
   methods: {
-    uploadImage(){
+    async uploadImage(){
       let data = new FormData();
       data.append("file", this.$store.getters.image);
-      return axios.post("/file", data, {headers: {'Content-Type': 'multipart/form-data'}});
+      const response = await axios.post("/file", data, {headers: {'Content-Type': 'multipart/form-data'}});
+      return response.data.id;
     },
     async onSubmit() {
-      this.fileId = (await this.uploadImage()).data.id;
+      this.fileId = await this.uploadImage();
       let data = {
         title: this.title,
         fileId: this.fileId,
         body: this.body,
         agency: this.agency
       }
-      await axios.post("/petition", data)
-      this.$router.push({name: 'home'})
+      axios.post("/petition", data)
+      .then(() => this.$router.push({name: 'home'}))
+      .catch(error => {
+        if (error.response && error.response.data.message) {
+          toast(error.response.data.message, {
+            "theme": "auto",
+            "type": "error",
+            "dangerouslyHTMLString": true
+          });
+        }
+      })
     },
   },
-  mounted() {}
+  mounted() {
+    if (!localStorage.getItem('user')) {
+      this.$router.push({'name': 'login'})
+    }
+  }
 }
 
 </script>
 
 <style scoped>
 @import "../assets/css/create-petition/form.css";
-@import "../assets/css/create-petition/upload-image.css";
-.dropzone {
-  height: fit-content;
-  min-height: 200px;
-  max-height: 400px;
-  width: 600px;
-  background: #fdfdfd;
-  border-radius: 5px;
-  border: 2px dashed #000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 3rem auto;
-}
-.dropzone input[type="file"] {
-  position: absolute;
-  opacity: 0;
-  width: inherit;
-  min-height: 200px;
-  max-height: 400px;
-  cursor: pointer;
-}
-
-.dropzone img {
-  width: 50%;
-  height: 50%;
-}
-
-
-
 
 
 </style>

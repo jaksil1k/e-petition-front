@@ -1,14 +1,16 @@
-.create-petition__input-text, select {
-    width: 100%;
-    padding: 12px 20px;
+.create-petition__input-text {
+    padding: 0.5rem 0;
+    width: 70%;
     margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: medium;
-}
+    /*display: inline-block;*/
 
+    border: 2px solid rgba(0, 0, 0, .5);
+    border-radius: 4px;
+
+
+    /*box-sizing: border-box;*/
+    /*font-size: medium;*/
+}
 input[type=submit] {
     width: 100%;
     background-color: #4CAF50;
@@ -26,19 +28,31 @@ input[type=submit]:hover {
 
 .create-petition {
     border-radius: 5px;
-    background-color: #f2f2f2;
     padding: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
 }
 .create-petition__form {
-    width: 50%;
+    max-width: 500px;
 }
 
-.create-petition__title {
-    margin-bottom: 10rem;
-    font-size: xxx-large;
+.create-petition__form-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 2rem;
+    margin: 2rem 0;
+
+    border-radius: 7px;
+    border: 2px solid rgba(0, 0, 0, .5);
+}
+
+
+.create-petition__h1 {
+    font-size: xx-large;
+    padding: 1rem 0;
 }
 .create-petition__text {
     font-size: medium;

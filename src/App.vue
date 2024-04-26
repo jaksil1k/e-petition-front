@@ -18,9 +18,8 @@ export default {
   methods: {},
   computed: {},
   mounted() {
-    if (localStorage.hasOwnProperty('user'))
-      this.$store.dispatch('token', localStorage.getItem('user'));
-  },
+    this.$store.dispatch('token', localStorage.getItem('user'), {root:true});
+  }
 }
 </script>
 
