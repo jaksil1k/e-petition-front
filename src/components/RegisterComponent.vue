@@ -20,7 +20,6 @@ export default {
     return {
       name: "",
       surname: "",
-      iin: "",
       email: "",
       password: "",
     }
@@ -29,7 +28,6 @@ export default {
     onSubmit() {
       let data = {
         name: this.name + " " + this.surname,
-        iin: this.iin,
         email: this.email,
         password: this.password,
       }
@@ -37,7 +35,7 @@ export default {
       axios.post('/auth/register', data)
           .then(response => {
             localStorage.setItem('user', response.data.token)
-            this.$store.dispatch('user', response.data.token);
+            this.$store.dispatch('token', response.data.token);
             this.$emit('registerSuccess');
           })
           .catch(error => {
