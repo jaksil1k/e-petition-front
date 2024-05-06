@@ -1,6 +1,6 @@
 .create-petition__input-text {
     padding: 0.5rem 0;
-    width: 70%;
+    max-width: 90%;
     margin: 8px 0;
     /*display: inline-block;*/
 
@@ -11,6 +11,12 @@
     /*box-sizing: border-box;*/
     /*font-size: medium;*/
 }
+input.create-petition__input-text {
+    width: 70%;
+}
+/*textarea.create-petition__input-text {*/
+/*    padding: 2rem 1rem;*/
+/*}*/
 input[type=submit] {
     width: 100%;
     background-color: #4CAF50;
@@ -42,11 +48,14 @@ input[type=submit]:hover {
     flex-direction: column;
     align-items: center;
 
-    padding: 2rem;
+    padding: 1rem 0;
     margin: 2rem 0;
 
     border-radius: 7px;
     border: 2px solid rgba(0, 0, 0, .5);
+}
+.create-petition__form-div:last-child {
+    align-items: normal;
 }
 
 

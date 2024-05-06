@@ -16,6 +16,9 @@ export default {
   computed: {},
   mounted() {
     this.$store.dispatch('token', localStorage.getItem('user'), {root:true});
+    if (this.$store.getters.token === null) {
+      this.$router.push({name: 'home'})
+    }
   }
 }
 </script>

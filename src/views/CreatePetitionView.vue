@@ -24,7 +24,7 @@
 
       <div class="create-petition__form-div">
         <label class="create-petition__text" for="body">Содержание петиции</label>
-        <textarea class="create-petition__input-text" rows="4" cols="50" id="body" v-model="body" required/>
+        <textarea class="create-petition__input-text" rows="8" cols="60" id="body" v-model="body" required/>
       </div>
 
       <div class="create-petition__div-btn">
