@@ -46,7 +46,6 @@ export default {
       isOwner: false,
       fileUrl: '',
       isModalVisible: false,
-      isAuth: false,
       isRegistered: false,
     }
   },
@@ -102,6 +101,11 @@ export default {
       this.closeModal();
     },
   },
+  computed: {
+    isAuth() {
+      return this.$store.getters.token;
+    }
+  },
   async mounted() {
     const res = await petitionApi.getById(this.$route.params.id)
     // console.log(json);
@@ -109,7 +113,7 @@ export default {
     // console.log(this.petition.file.id)
     this.fileUrl = axios.defaults.baseURL + '/file/' + this.petition.file.id;
     if (localStorage.getItem('user')) {
-      this.isAuth = true;
+      this.$store.dispatch('token', localStorage.getItem('user'))
     }
     if (this.$store.getters.token) {
       this.isOwner = (await petitionApi.isMy(this.petition.id)).data.is_owner;
