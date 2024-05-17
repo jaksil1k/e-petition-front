@@ -1,31 +1,38 @@
 <template>
-  <main class="petition__main">
+  <main class="profile__main">
 
     <section class="profile">
       <img src="@/assets/images/default-profile-icon.png" alt="profile image">
       <h1 class="profile__name">{{user.name}}</h1>
-      <button class="button-23" role="button" @click="$router.push({name: 'change-profile'})">Edit Profile</button>
+      <button class="profile__btn" role="button" @click="$router.push({name: 'change-profile'})">Edit Profile</button>
     </section>
 
-
-    <section class="profile__section">
-      <nav class="profile__nav">
-        <a class="profile__link" :style="createdListActive" @click="showCreated">Created</a>
-        <a class="profile__link" :style="signedListActive" @click="showSigned">Signed</a>
-      </nav>
-    </section>
-    <section class="created-petitions" v-for="item in list" :key="item.id">
-      <div class="petition">
-        <div class="petition__item">
-          <p class="petition__p">{{item.title}}</p>
-        </div>
-        <div>
-          <button @click="showPetition(item.id)">
-            Show Petition
-          </button>
-        </div>
+    <div class="created-petitions__container">
+      <div>
+        <section class="profile__section">
+          <nav class="profile__nav">
+            <a class="profile__link" :style="createdListActive" @click="showCreated">Created</a>
+            <a class="profile__link" :style="signedListActive" @click="showSigned">Signed</a>
+          </nav>
+        </section>
+        <section class="created-petitions" v-for="(item, index) in list" :key="item.id">
+          <div class="petition">
+            <div class="petition__item" @click="openPetition(item.id)">
+              <p class="petition__p index">{{index}}</p>
+              <p class="petition__p title">{{item.title}}</p>
+            </div>
+            <div class="profile-petitions__icons">
+              <div class="petition__img-div" @click="openPetition(item.id)">
+                <img src="@/assets/images/blue-arrow-png.png" alt="open petition">
+              </div>
+              <div class="profile-petitions__icons-edit">
+                <img src="@/assets/images/change-document-edit-modify-paper-pencil-write-writing-icon.png">
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </main>
 </template>
 
@@ -44,13 +51,14 @@ export default {
     }
   },
   methods: {
-    showPetition(id) {
+    openPetition(id) {
       this.$router.push({name: 'petition_view', params: {id: id}})
     },
     async showCreated() {
       if (this.createdList.length === 0)
         this.createdList = (await axios.get("/petition/my")).data;
       this.list = this.createdList.petitions;
+      console.log(this.list);
       this.isCreatedListActive = true;
     },
     async showSigned() {
@@ -79,8 +87,12 @@ export default {
     if (!this.$store.getters.token) {
       this.$router.push('/login');
     }
+    if (!localStorage.hasOwnProperty('user')) {
+      this.$store.dispatch('token', localStorage.getItem('user'));
+    }
     this.getCurrentUser()
-        .then(res => this.user = res);
+        .then(res => this.user = res)
+        .catch(e => e.response.status===401?localStorage.removeItem('user'):e);
     this.showCreated();
   }
 }
@@ -90,23 +102,64 @@ export default {
 @import '../assets/css/profile/style.css';
 @import '../assets/css/profile/nav.css';
 
+
+.created-petitions__container {
+  /*display: flex;*/
+  /*justify-content: center;*/
+
+}
+.created-petitions__container>div {
+  width: 83%;
+  margin-left: 14%;
+  /*margin-right: 4%;*/
+}
+
 .created-petitions {
   /*height: 70vh;*/
-  margin: 0 100px;
+  /*margin: 0 100px;*/
   width: 90%;
 }
-.petition__main{
-  height: 130vh;
-}
 .petition {
-  height: 50px;
-  border: 1px solid;
+  border: 2px solid #639BE4;
+  padding: 2rem 0;
+  border-radius: 14px;
   display: flex;
   justify-content: space-between;
 }
-.petition__p {
-  font-size: large;
+
+.petition__item {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
 }
+
+.petition__p {
+  margin: 0 1rem;
+  font-size: large;
+  font-weight: 600;
+}
+
+.petition__p.index {
+  font-size: xx-large;
+}
+
+.petition__p.title {
+  max-width: 70%;
+}
+
+.profile-petitions__icons {
+  display: flex;
+  flex-direction: row-reverse;
+  max-width: 10%;
+}
+
+.profile-petitions__icons-edit {
+  max-width: 46%;
+}
+.petition__img-div {
+  max-width: 54%;
+}
+
 
 
 .profile__link::after {
