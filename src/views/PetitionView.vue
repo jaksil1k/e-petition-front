@@ -138,7 +138,8 @@ export default {
     },
     signXmlBack(result) {
       if (result['code'] === "500") {
-        toast(result['message'], {
+        toast(result['message'] === "action.canceled"?"Действие отменено пользователем."
+            : "Что то пошло не так, повторите позже", {
           "theme": "auto",
           "type": "error",
           "dangerouslyHTMLString": true

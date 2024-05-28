@@ -21,13 +21,17 @@
               <p class="petition__p index">{{index}}</p>
               <p class="petition__p title">{{item.title}}</p>
             </div>
+            <div class="petition__status">
+              <p class="petition__p status" v-bind:class="item.status">STATUS: {{item.status}}</p>
+            </div>
             <div class="profile-petitions__icons">
               <div class="petition__img-div" @click="openPetition(item.id)">
                 <img src="@/assets/images/blue-arrow-png.png" alt="open petition">
               </div>
-              <div class="profile-petitions__icons-edit">
-                <img src="@/assets/images/change-document-edit-modify-paper-pencil-write-writing-icon.png">
-              </div>
+
+<!--              <div class="profile-petitions__icons-edit">-->
+<!--                <img src="@/assets/images/change-document-edit-modify-paper-pencil-write-writing-icon.png">-->
+<!--              </div>-->
             </div>
           </div>
         </section>
@@ -47,10 +51,16 @@ export default {
       signedList: [],
       createdList: [],
       isCreatedListActive: true,
-      user: {}
+      user: {},
+      computedColor: "black"
     }
   },
   methods: {
+    showStatus(status) {
+      if (status === "ACCEPT") {
+        this.com
+      }
+    },
     openPetition(id) {
       this.$router.push({name: 'petition_view', params: {id: id}})
     },
@@ -137,6 +147,15 @@ export default {
   margin: 0 1rem;
   font-size: large;
   font-weight: 600;
+}
+.petition__p.status.ACCEPT {
+  color: green;
+}
+.petition__p.status.ON_REVIEW {
+  color: yellow;
+}
+.petition__p.status.DRAFT {
+  color: gray;
 }
 
 .petition__p.index {
