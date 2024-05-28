@@ -20,12 +20,19 @@
       </div>
     </section>
     <section class="sign" v-if="isAuth">
-      <Modal
-          v-show="isModalVisible"
-          @close="closeModal"
-          @sign="signPetition"
-      />
-      <button class="button-9" type="button" @click="showModal">Sign petition</button>
+<!--      <Modal-->
+<!--          v-show="isModalVisible"-->
+<!--          @close="closeModal"-->
+<!--          @sign="sign"-->
+<!--      />-->
+<!--      <button class="button-9" type="button" @click="showModal">Sign petition</button>-->
+      <button class="button-9" type="button" onclick="signXmlCall();">Sign petition</button>
+      <textarea class="form-control" id="xmlToSign" rows="3" hidden readonly>{{xml}}</textarea>
+      <select id="storageSelect" class="custom-select" hidden>
+        <option value="PKCS12" selected>PKCS12</option>
+      </select>
+      <textarea class="form-control" id="signedXml" rows="6" hidden readonly>Подписанный XML</textarea>
+
     </section>
   </main>
 </template>
@@ -37,19 +44,90 @@ import axios from "axios";
 import {toast} from "vue3-toastify";
 import Register from "@/components/RegisterComponent";
 import Login from "@/components/LoginComponent";
+import {NCALayerClient} from "ncalayer-js-client";
+import $ from 'jquery'
 export default {
   name: 'PetitionView',
   components: {Login, Register, Modal},
   data() {
     return {
+      dataFile: {},
       petition: {},
       isOwner: false,
       fileUrl: '',
       isModalVisible: false,
       isRegistered: false,
+      signature: null,
+      waiting: false,
+      msg: 'Welcome to Your Vue.js App',
+      html: '<i class="fa fa-cog fa-spin fa-3x fa-fw"></i>',  //this line demostrate how to use fontawesome animation icon
+      blocked: true,
+      webSocket: new WebSocket('wss://127.0.0.1:13579/'),
+      callback: null,
+      xml: '',
     }
   },
   methods: {
+    sendXmlToSign(e) {
+      console.log(e.target);
+    },
+    async sign() {
+      this.signature = null;
+      this.waiting = true;
+
+      const ncalayerClient = new NCALayerClient();
+
+      try {
+        await ncalayerClient.connect();
+      } catch (error) {
+        alert(`Не удалось подключиться к NCALayer: ${error.toString()}`);
+        return;
+      }
+
+      try {
+        this.signature = await ncalayerClient.basicsSignCMS(
+            NCALayerClient.basicsStorageAll,
+            this.$refs.fileUploadInput.files[0],
+            NCALayerClient.basicsCMSParamsDetached,
+            NCALayerClient.basicsSignerSignAny,
+        );
+        this.waiting = false;
+      } catch (error) {
+        if (error.canceledByUser) {
+          alert('Действие отменено пользователем.');
+        }
+
+        alert(error.toString());
+        return;
+      }
+    },
+    signPetition2() {
+
+      // console.log('<?xml version="1.0" encoding="UTF-8"?><root>'
+      //     + this.OBJtoXML(this.petition) + '</root>');
+      const xmlToSign = '<?xml version="1.0" encoding="UTF-8"?><root>'
+          + this.OBJtoXML(this.petition) + '</root>';
+    },
+    OBJtoXML(obj) {
+      let xml = '';
+      for (const prop in obj) {
+        xml += obj[prop] instanceof Array ? '' : "<" + prop + ">";
+        if (obj[prop] instanceof Array) {
+          for (const array in obj[prop]) {
+            xml += "<" + prop + ">";
+            xml += this.OBJtoXML(new Object(obj[prop][array]));
+            xml += "</" + prop + ">";
+          }
+        } else if (typeof obj[prop] == "object") {
+          xml += this.OBJtoXML(new Object(obj[prop]));
+        } else {
+          xml += obj[prop];
+        }
+        xml += obj[prop] instanceof Array ? '' : "</" + prop + ">";
+      }
+      xml = xml.replace(/<\/?[0-9]+>/g, '');
+      return xml
+    },
     showModal() {
       this.isModalVisible = true;
     },
@@ -108,18 +186,34 @@ export default {
   },
   async mounted() {
     const res = await petitionApi.getById(this.$route.params.id)
-    // console.log(json);
     this.petition = res.data;
+    this.xml = '<?xml version="1.0" encoding="UTF-8"?><root>'
+        + this.OBJtoXML(this.petition) + '</root>'
     // console.log(this.petition.file.id)
     this.fileUrl = axios.defaults.baseURL + '/file/' + this.petition.file.id;
     if (localStorage.getItem('user')) {
       this.$store.dispatch('token', localStorage.getItem('user'))
     }
     if (this.$store.getters.token) {
-      this.isOwner = (await petitionApi.isMy(this.petition.id)).data.is_owner;
+      //this.isOwner = (await petitionApi.isMy(this.petition.id)).data.is_owner;
     }
   },
 }
+// axios.post("http://localhost:8081/api/petition/signXml", {
+//     petitionId: window.location.href.split('/').reverse()[0],
+//     xml: rw.responseObject
+// }, {
+//     headers: {
+//         'Authorization': 'Bearer ' + localStorage.getItem("user")
+//     }
+// }).then(res => {
+//     console.log(res)
+//     if (res.hasOwnProperty("msg")) {
+//         alert("Успешно подписано");
+//     } else {
+//         alert("Петиция уже подписана заявителем");
+//     }
+// });
 </script>
 
 <style scoped>
@@ -165,3 +259,4 @@ export default {
   max-width: 300px;
 }
 </style>
+
