@@ -26,12 +26,7 @@
 <!--          @sign="sign"-->
 <!--      />-->
 <!--      <button class="button-9" type="button" @click="showModal">Sign petition</button>-->
-      <button class="button-9" type="button" onclick="signXmlCall();">Sign petition</button>
-      <textarea class="form-control" id="xmlToSign" rows="3" hidden readonly>{{xml}}</textarea>
-      <select id="storageSelect" class="custom-select" hidden>
-        <option value="PKCS12" selected>PKCS12</option>
-      </select>
-      <textarea class="form-control" id="signedXml" rows="6" hidden readonly>Подписанный XML</textarea>
+      <button class="button-9" type="button" @click="sign" :disabled="waiting">Sign Petition</button>
 
     </section>
   </main>
@@ -44,8 +39,7 @@ import axios from "axios";
 import {toast} from "vue3-toastify";
 import Register from "@/components/RegisterComponent";
 import Login from "@/components/LoginComponent";
-import {NCALayerClient} from "ncalayer-js-client";
-import $ from 'jquery'
+
 export default {
   name: 'PetitionView',
   components: {Login, Register, Modal},
@@ -63,8 +57,8 @@ export default {
       html: '<i class="fa fa-cog fa-spin fa-3x fa-fw"></i>',  //this line demostrate how to use fontawesome animation icon
       blocked: true,
       webSocket: new WebSocket('wss://127.0.0.1:13579/'),
-      callback: null,
       xml: '',
+      callback: null,
     }
   },
   methods: {
@@ -72,41 +66,115 @@ export default {
       console.log(e.target);
     },
     async sign() {
+      let callback = null;
       this.signature = null;
       this.waiting = true;
+      let SELF = this;
+      const xmlToSign = '<?xml version="1.0" encoding="UTF-8"?><root>'
+          + this.OBJtoXML(this.petition) + '</root>';
+      this.webSocket.onopen = function (event) {
+        console.log("Connection opened");
+      };
+      this.webSocket.onmessage = function (event) {
+        const result = JSON.parse(event.data);
 
-      const ncalayerClient = new NCALayerClient();
+        if (result != null) {
+          const rw = {
+            code: result['code'],
+            message: result['message'],
+            responseObject: result['responseObject'],
+            getResult: function () {
+              return this.result;
+            },
+            getMessage: function () {
+              return this.message;
+            },
+            getResponseObject: function () {
+              return this.responseObject;
+            },
+            getCode: function () {
+              return this.code;
+            }
+          };
+          SELF.signXmlBack(rw);
+        }
+      };
+      this.webSocket.onclose = function (event) {
+        if (event.wasClean) {
+          console.log('connection has been closed');
+        } else {
+          console.log('Connection error');
+        }
+        if (event.code === 1006) {
+          toast("NCALayer выключен!", {
+            "theme": "auto",
+            "type": "error",
+            "dangerouslyHTMLString": true
+          })
+        }
+        console.log('Code: ' + event.code + ' Reason: ' + event.reason);
+      };
+      this.webSocket.onopen = function (event) {
+        console.log("Connection opened");
+      };
 
       try {
-        await ncalayerClient.connect();
-      } catch (error) {
-        alert(`Не удалось подключиться к NCALayer: ${error.toString()}`);
-        return;
-      }
-
-      try {
-        this.signature = await ncalayerClient.basicsSignCMS(
-            NCALayerClient.basicsStorageAll,
-            this.$refs.fileUploadInput.files[0],
-            NCALayerClient.basicsCMSParamsDetached,
-            NCALayerClient.basicsSignerSignAny,
-        );
+        let signXml = {
+          "module": "kz.gov.pki.knca.commonUtils",
+          "method": "signXml",
+          "args": ["PKCS12", "SIGNATURE", xmlToSign, "", ""]
+        };
+        this.webSocket.send(JSON.stringify(signXml));
         this.waiting = false;
       } catch (error) {
         if (error.canceledByUser) {
-          alert('Действие отменено пользователем.');
+          toast('Действие отменено пользователем.', {
+            "theme": "auto",
+            "type": "error",
+            "dangerouslyHTMLString": true
+          });
         }
-
-        alert(error.toString());
-        return;
       }
     },
-    signPetition2() {
-
-      // console.log('<?xml version="1.0" encoding="UTF-8"?><root>'
-      //     + this.OBJtoXML(this.petition) + '</root>');
-      const xmlToSign = '<?xml version="1.0" encoding="UTF-8"?><root>'
-          + this.OBJtoXML(this.petition) + '</root>';
+    signXmlBack(result) {
+      if (result['code'] === "500") {
+        toast(result['message'], {
+          "theme": "auto",
+          "type": "error",
+          "dangerouslyHTMLString": true
+        });
+      } else if (result['code'] === "200") {
+        const res = result['responseObject'];
+        // console.log(res);
+        fetch("http://localhost:8081/api/petition/signXml", {
+          method: "POST",
+          // mode: 'no-cors',
+          headers: new Headers({
+            'Authorization': 'Bearer ' + localStorage.getItem('user'),
+            'Content-Type': 'application/json'
+          }),
+          body: JSON.stringify({
+            petitionId: window.location.href.split('/').reverse()[0],
+            xml: res
+          })
+        }).then(res => res.json()
+        ).then(res => {
+          if (res.hasOwnProperty('msg')) {
+            toast( res.msg, {
+              "theme": "auto",
+              "type": "success",
+              "dangerouslyHTMLString": true}
+            );
+          }
+          else {
+            toast(res.message, {
+              "theme": "auto",
+              "type": "error",
+              "dangerouslyHTMLString": true
+            });
+          }
+        });
+      }
     },
     OBJtoXML(obj) {
       let xml = '';
@@ -128,12 +196,6 @@ export default {
       xml = xml.replace(/<\/?[0-9]+>/g, '');
       return xml
     },
-    showModal() {
-      this.isModalVisible = true;
-    },
-    closeModal() {
-      this.isModalVisible = false;
-    },
     showSign() {
       this.isAuth = true;
     },
@@ -142,41 +204,6 @@ export default {
     },
     showRegister() {
       this.isRegistered = false;
-    },
-    signPetition(req) {
-      if (!req.esp || !req.password) {
-        toast("ЭЦП или пароля нету", {
-          "theme": "auto",
-          "type": "error",
-          "dangerouslyHTMLString": true
-        });
-        return;
-      }
-      axios.post("/petition/signEds", {
-        petitionId: this.petition.id,
-        certificate_store: req.esp,
-        password: req.password
-      })
-      .then((response) => {
-        toast(response.data.msg, {
-          "theme": "auto",
-          "type": "success",
-          "dangerouslyHTMLString": true
-        });
-      })
-      .catch(error => {
-        if (error.response.data.message) {
-          toast(error.response.data.message, {
-            "theme": "auto",
-            "type": "error",
-            "dangerouslyHTMLString": true
-          });
-        }
-        else {
-          throw error;
-        }
-      })
-      this.closeModal();
     },
   },
   computed: {
