@@ -8,26 +8,25 @@
       <p class="petition__content">Создано: {{petition.createdAt}}</p>
       <p class="petition__content">Направлено: {{petition.agency}}</p>
       <p class="petition__content body">{{petition.body}}</p>
-    </section>
-    <section class="auth" v-if="!isAuth">
-      <div v-if="!isRegistered">
-        <h2 class="auth__h2">Already registered? <a @click="showLogin" href="javascript:void(0)">Sign in</a></h2>
-        <Register @registerSuccess="showSign"/>
-      </div>
-      <div v-if="isRegistered">
-        <h2 class="auth__h2">Haven't registered yet? <a @click="showRegister" href="javascript:void(0)">Sign up</a></h2>
-        <Login @loginSuccess="showSign"/>
-      </div>
-    </section>
-    <section class="sign" v-if="isAuth">
-<!--      <Modal-->
-<!--          v-show="isModalVisible"-->
-<!--          @close="closeModal"-->
-<!--          @sign="sign"-->
-<!--      />-->
-<!--      <button class="button-9" type="button" @click="showModal">Sign petition</button>-->
-      <button class="button-9" type="button" @click="sign" :disabled="waiting">Sign Petition</button>
 
+    </section>
+    <section>
+      <div class="auth" v-if="!isAuth">
+        <div v-if="!isRegistered">
+          <h2 class="auth__h2">Already registered? <a @click="showLogin" href="javascript:void(0)">Sign in</a></h2>
+          <Register @registerSuccess="showSign"/>
+        </div>
+        <div v-if="isRegistered">
+          <h2 class="auth__h2">Haven't registered yet? <a @click="showRegister" href="javascript:void(0)">Sign up</a></h2>
+          <Login @loginSuccess="showSign"/>
+        </div>
+      </div>
+      <div class="sign" v-if="isAuth">
+        <button class="button-9" type="button" @click="sign" :disabled="waiting">Sign Petition</button>
+      </div>
+      <div class="status-div">
+        <p class="petition__content status" v-bind:class="petition.status">Статус: {{petition.status}}</p>
+      </div>
     </section>
   </main>
 </template>
@@ -250,6 +249,22 @@ export default {
   width: 40%;
   height: 30%;
   margin-bottom: 1rem;
+}
+
+.status-div {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  max-width: 300px;
+}
+.status.ACCEPT {
+  color: green;
+}
+.status.ON_REVIEW {
+  color: yellow;
+}
+.status.DRAFT {
+  color: gray;
 }
 .petition__img-div {
   margin-top: 7rem;
