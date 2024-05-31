@@ -24,15 +24,15 @@
             <div class="petition__status">
               <p class="petition__p status" v-bind:class="item.status">STATUS: {{item.status}}</p>
             </div>
-            <div class="profile-petitions__icons">
-              <div class="petition__img-div" @click="openPetition(item.id)">
-                <img src="@/assets/images/blue-arrow-png.png" alt="open petition">
-              </div>
+<!--            <div class="profile-petitions__icons">-->
+<!--              <div class="petition__img-div" @click="openPetition(item.id)">-->
+<!--                <img src="@/assets/images/blue-arrow-png.png" alt="open petition">-->
+<!--              </div>-->
 
 <!--              <div class="profile-petitions__icons-edit">-->
 <!--                <img src="@/assets/images/change-document-edit-modify-paper-pencil-write-writing-icon.png">-->
 <!--              </div>-->
-            </div>
+<!--            </div>-->
           </div>
         </section>
       </div>
@@ -131,7 +131,8 @@ export default {
 }
 .petition {
   border: 2px solid #639BE4;
-  padding: 2rem 0;
+  margin: 1.75rem 0;
+  padding: 0.875rem 0;
   border-radius: 14px;
   display: flex;
   justify-content: space-between;

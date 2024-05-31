@@ -15,15 +15,23 @@
       <ul>
         <!-- Menu links -->
         <li>
-          <router-link :to="{name: 'profile'}"> Profile </router-link>
+          <router-link :to="{name: 'profile'}" class="white">
+            <img class="my-profile__modal-img" src="@/assets/images/icons/myProfile.png" alt="avatar"/>
+            <p>Profile</p> </router-link>
         </li>
         <li>
-          <router-link :to="{name: 'change-profile'}"> Change profile info </router-link>
+          <router-link :to="{name: 'change-profile'}">
+            <img class="my-profile__modal-img" src="@/assets/images/icons/pencil.png" alt="pencil"/>
+            <p>Change profile info</p>
+          </router-link>
         </li>
         <!-- Optional divider -->
-        <li class="divider"></li>
+<!--        <li class="divider"></li>-->
         <li>
-          <a href="javascript:void(0)" @click="logout"> Logout </a>
+          <a href="javascript:void(0)" @click="logout">
+            <img class="my-profile__modal-img" src="@/assets/images/icons/door.png" alt="outDoor"/>
+            <p>Logout</p>
+          </a>
         </li>
       </ul>
     </details>
@@ -50,6 +58,10 @@ export default {
 </script>
 
 <style scoped>
+.my-profile__modal-img {
+  width: 25px;
+}
+
 .dropdown-container {
   display: inline-block;
   padding: 10px;
@@ -89,18 +101,18 @@ export default {
 }
 .dropdown-container .dropdown summary .with-down-arrow::after {
   content: "";
-  font-family: "Material Symbols Outlined";
-  font-weight: normal;
-  font-style: normal;
+  /*font-family: "Material Symbols Outlined";*/
+  /*font-weight: normal;*/
+  /*font-style: normal;*/
   font-size: 1.5rem;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
+  /*line-height: 1;*/
+  /*letter-spacing: normal;*/
+  /*text-transform: none;*/
+  /*display: inline-block;*/
+  /*white-space: nowrap;*/
+  /*word-wrap: normal;*/
+  /*direction: ltr;*/
+  /*-webkit-font-smoothing: antialiased;*/
 }
 .dropdown-container .dropdown.left ul {
   left: 0;
@@ -111,33 +123,42 @@ export default {
 .dropdown-container .dropdown ul {
   padding: 0;
   margin: 0;
-  box-shadow: 0 0 10px #00000030;
+  /*box-shadow: 0 0 10px #00000030;*/
   min-width: max-content;
   position: absolute;
   top: 100%;
-  border-radius: 10px;
+  border-radius: 21px;
   background-color: #fff;
   z-index: 2;
+  border: 1px solid;
 }
 .dropdown-container .dropdown ul li {
   list-style-type: none;
   display: block;
+  gap: 0.1rem;
+  padding: 0.875rem;
   /* If you use divider & borders, it's best to use top borders */
   /*border-top: 1px solid #ccc;*/
 }
 .dropdown-container .dropdown ul li:first-of-type {
-  border: none;
-  background-color: #f2f2f2;
+  /*border: none;*/
+  /*background-color: #f2f2f2;*/
+}
+
+.dropdown-container .dropdown ul li:not(:last-child) {
+  border-bottom: 1px solid;
 }
 .dropdown-container .dropdown ul li p {
-  padding: 10px 15px;
+  padding-left: 1rem;
   margin: 0;
 }
 .dropdown-container .dropdown ul li a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 10px 15px;
+  /*padding: .2rem 1rem;*/
+  padding: 1rem;
+  /*padding-left: 0;*/
   text-decoration: none;
   line-height: 1;
   color: #333;
@@ -146,20 +167,20 @@ export default {
   color: #ff34b2;
 }
 .dropdown-container .dropdown ul li:first-of-type {
-  border-radius: 10px 10px 0 0;
+  /*border-radius: 10px 10px 0 0;*/
 }
 .dropdown-container .dropdown ul li:last-of-type {
-  border-radius: 0 0 10px 10px;
+  /*border-radius: 0 0 10px 10px;*/
 }
 .dropdown-container .dropdown ul li.divider {
-  border: none;
-  border-bottom: 1px solid #333;
+  /*border: none;*/
+  /*border-bottom: 1px solid #333;*/
   /*
    * removes border from Li after the divider element
    * best used in combination with top borders on other LIs
    */
 }
 .dropdown-container .dropdown ul li.divider ~ li {
-  border: none;
+  /*border: none;*/
 }
 </style>

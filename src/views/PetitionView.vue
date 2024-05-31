@@ -56,21 +56,13 @@ export default {
       html: '<i class="fa fa-cog fa-spin fa-3x fa-fw"></i>',  //this line demostrate how to use fontawesome animation icon
       blocked: true,
       webSocket: new WebSocket('wss://127.0.0.1:13579/'),
-      xml: '',
-      callback: null,
     }
   },
   methods: {
-    sendXmlToSign(e) {
-      console.log(e.target);
-    },
     async sign() {
-      let callback = null;
       this.signature = null;
       this.waiting = true;
       let SELF = this;
-      const xmlToSign = '<?xml version="1.0" encoding="UTF-8"?><root>'
-          + this.OBJtoXML(this.petition) + '</root>';
       this.webSocket.onopen = function (event) {
         console.log("Connection opened");
       };
@@ -117,6 +109,8 @@ export default {
         console.log("Connection opened");
       };
 
+      const xmlToSign = '<?xml version="1.0" encoding="UTF-8"?><root>'
+          + this.OBJtoXML(this.petition) + '</root>';
       try {
         let signXml = {
           "module": "kz.gov.pki.knca.commonUtils",
@@ -157,16 +151,14 @@ export default {
             petitionId: window.location.href.split('/').reverse()[0],
             xml: res
           })
-        }).then(res => res.json()
-        ).then(res => {
+        }).then(res => res.json()).then(res => {
           if (res.hasOwnProperty('msg')) {
             toast( res.msg, {
               "theme": "auto",
               "type": "success",
               "dangerouslyHTMLString": true}
             );
-          }
-          else {
+          } else {
             toast(res.message, {
               "theme": "auto",
               "type": "error",
@@ -294,8 +286,11 @@ export default {
 }
 .auth {
   margin-top: 7rem;
-  width: 50%;
+  width: 70%;
   align-items: initial;
+}
+.auth__form {
+  max-width: 60%;
 }
 .button-9 {
   margin-top: 10%;
