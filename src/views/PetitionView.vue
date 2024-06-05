@@ -7,7 +7,9 @@
       <h1 class="petition__title">{{petition.title}}</h1>
       <p class="petition__content">Создано: {{petition.createdAt}}</p>
       <p class="petition__content">Направлено: {{petition.agency}}</p>
+      <p class="petition__content">Подписали: {{petition.signed_count}}</p>
       <p class="petition__content body">{{petition.body}}</p>
+<!--      {{petition}}-->
 
     </section>
     <section>
@@ -115,7 +117,7 @@ export default {
         let signXml = {
           "module": "kz.gov.pki.knca.commonUtils",
           "method": "signXml",
-          "args": ["PKCS12", "SIGNATURE", xmlToSign, "", ""]
+          "args": ["PKCS12", "SIGNATURE", xmlToSign, "", "some"]
         };
         this.webSocket.send(JSON.stringify(signXml));
         this.waiting = false;
@@ -209,7 +211,7 @@ export default {
     this.xml = '<?xml version="1.0" encoding="UTF-8"?><root>'
         + this.OBJtoXML(this.petition) + '</root>'
     // console.log(this.petition.file.id)
-    this.fileUrl = axios.defaults.baseURL + '/file/' + this.petition.file.id;
+    this.fileUrl = axios.defaults.baseURL + '/file/' + this.petition.file_id;
     if (localStorage.getItem('user')) {
       this.$store.dispatch('token', localStorage.getItem('user'))
     }
