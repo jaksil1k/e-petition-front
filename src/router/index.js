@@ -7,6 +7,7 @@ import LoginView from "@/views/LoginView";
 import PetitionView from "@/views/PetitionView";
 import PetitionsView from "@/views/PetitionsView";
 import ChangeUserView from "@/views/ChangeUserView";
+import AdminView from "@/views/AdminView";
 
 
 const routes = [
@@ -54,7 +55,12 @@ const routes = [
     path: '/petitions',
     name: 'petitions',
     component: PetitionsView
-  }
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminView
+  },
 ]
 
 const router = createRouter({

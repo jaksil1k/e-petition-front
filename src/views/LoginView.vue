@@ -17,7 +17,15 @@ export default {
   components: {Login},
   methods: {
     mvHome() {
+      console.log(this.parseJwt(localStorage.getItem('user')).role);
       this.$router.push({name: 'home'});
+    },
+    parseJwt(token) {
+      try {
+        return JSON.parse(atob(token.split('.')[1]));
+      } catch (e) {
+        return null;
+      }
     }
   }
 }
